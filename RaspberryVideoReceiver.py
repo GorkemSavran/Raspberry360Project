@@ -43,12 +43,12 @@ class RaspberryVideoReceiver:
                     '! appsink'
                 ]
 
-        config = \
-            [
-                'videotestsrc ! decodebin',
-                '! videoconvert ! video/x-raw,format=(string)BGR ! videoconvert',
-                '! appsink emit-signals=true'
-            ]
+        # config = \
+        #     [
+        #         'videotestsrc ! decodebin',
+        #         '! videoconvert ! video/x-raw,format=(string)BGR ! videoconvert',
+        #         '! appsink emit-signals=true'
+        #     ]
         command = ' '.join(config)
         print(command)
         self.video_pipe = Gst.parse_launch(command)

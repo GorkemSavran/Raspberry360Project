@@ -12,13 +12,13 @@ class StitcherProcess(Process):
         self.out_queue = out_queue
 
     def run(self):
-        stitcher = cv2.createStitcher() if imutils.is_cv3() else cv2.Stitcher_create()
+        stitcher = cv2.createStitcher(True) if imutils.is_cv3() else cv2.Stitcher_create()
         while True:
             if not self.queue.empty():
-                frame, frame1 = self.queue.get()
+                frame, frame1 = self.queue.get_nowait()
                 try:
                     (status, stitched) = stitcher.stitch([frame, frame1])
                     if status == 0:
-                        self.out_queue.put(stitched)
+                        self.out_queue.put_nowait(stitched)
                 except:
                     pass
