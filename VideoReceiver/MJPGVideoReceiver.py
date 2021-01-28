@@ -1,14 +1,9 @@
-import time
-import cv2
-import numpy as np
-import imutils
-import threading
+import VideoReceiver
 
-
-class RaspberryVideoReceiver(threading.Thread):
-    def __init__(self, address:str="192.168.0.48", port:int=5600, isGstreamer:bool=False):
-        threading.Thread.__init__(self)
-        self.cap:cv2.VideoCapture = None
+class RaspberryVideoReceiver(VideoReceiver):
+    def __init__(self, address:str="192.168.2.1", port:int=5600):
+        VideoReceiver.__init__(self)
+        self.cap: cv2.VideoCapture = None
         if address and port and not isGstreamer:
             config = f"http://{address}:{port}/stream.mjpg"
             self.cap = cv2.VideoCapture(config)
@@ -30,4 +25,3 @@ class RaspberryVideoReceiver(threading.Thread):
 
     def frame(self):
         return self.__frame
-

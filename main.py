@@ -1,9 +1,6 @@
-from RaspberryVideoReceiver import RaspberryVideoReceiver
+from VideoReceiver.RaspberryVideoReceiver import RaspberryVideoReceiver
 import cv2
-from multiprocessing import Queue
-import imutils
-from StitcherProcess import StitcherProcess
-import time
+
 
 def main():
     # send_queue = Queue()
@@ -18,10 +15,11 @@ def main():
     while True:
 
         frames = [receiver.frame() for receiver in camera_receivers]
-        # while None in frames:
+        # if not frames.__contains__(None):
         #     frames = [receiver.frame() for receiver in camera_receivers]
-
-        [cv2.imshow(f"frame{idx}", frame) for idx, frame in enumerate(frames) if frame is not None]
+        #     [cv2.imshow(f"frame{idx}", frame) for idx, frame in enumerate(frames)]
+        print(frames)
+        # [cv2.imshow(f"frame{idx}", frame) for idx, frame in enumerate(frames) if frame is not None]
         # try:
             #     (status, stitched) = stitcher.stitch([frame, frame1])
             #     if status == 0:
