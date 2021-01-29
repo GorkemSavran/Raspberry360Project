@@ -1,53 +1,32 @@
-from Camera.MJPGVideoReceiver import MJPGVideoReceiver
 import cv2
 from multiprocessing import Queue
-
+from Camera.GstreamerVideoReceiver import GstreamerVideoReceiver
+import imutils
 
 def main():
-    # send_queue = Queue()
-    # get_queue = Queue()
-    # camera_receivers = [MJPGVideoReceiver(address=f"192.168.0.{47 + i}", port=5600) for i in range(2)]
-    # stitcher = cv2.createStitcher(True) if imutils.is_cv3() else cv2.Stitcher_create()
-
-    # stitcher_process = StitcherProcess(queue=queue, out_queue=out_queue)
-    # stitcher_process.daemon = True
-    # stitcher_process.start()
+    config0 = f"udpsrc address=192.168.0.20 port=5600 ! application/x-rtp, payload=96 ! rtph264depay ! h264parse ! avdec_h264 ! decodebin ! videoconvert ! video/x-raw,format=(string)BGR ! videoconvert ! appsink"
+    config1 = f"udpsrc address=192.168.0.20 port=5604 ! application/x-rtp, payload=96 ! rtph264depay ! h264parse ! avdec_h264 ! decodebin ! videoconvert ! video/x-raw,format=(string)BGR ! videoconvert ! appsink"
+    # cam0 = cv2.VideoCapture(config0, cv2.CAP_GSTREAMER)
+    # cam1 = cv2.VideoCapture(config1, cv2.CAP_GSTREAMER)
+    cam0 = GstreamerVideoReceiver(address="192.168.0.20", port=5600)
+    cam1 = GstreamerVideoReceiver(address="192.168.0.20", port=5604)
+    stitcher = cv2.createStitcher(True) if imutils.is_cv3() else cv2.Stitcher_create()
 
     while True:
-
-        # frames = [receiver.frame() for receiver in camera_receivers]
-        # if not frames.__contains__(None):
-        #     frames = [receiver.frame() for receiver in camera_receivers]
-        #     [cv2.imshow(f"frame{idx}", frame) for idx, frame in enumerate(frames)]
-        # print(frames)
-        # [cv2.imshow(f"frame{idx}", frame) for idx, frame in enumerate(frames) if frame is not None]
-        # try:
-            #     (status, stitched) = stitcher.stitch([frame, frame1])
-            #     if status == 0:
-            #         cv2.imshow("stitched", stitched)
-            #         elapsed = time.time() - start
-            #         counter += 1
-            #         sum += elapsed
-            #         print("Counter: ", counter)
-            #         print("Avarage: ", sum / counter)
-            #         print("Finish: ", elapsed)
-            # except:
-            #     pass
-            # cv2.imshow("frame", frame)
+        # ret, frame0 = cam0.read()
+        # ret, frame1 = cam1.read()
+        frame0 = cam0.frame()
+        frame1 = cam1.frame()
+        if frame0 is not None and frame1 is not None:
+            # cv2.imshow("frame0", frame0)
             # cv2.imshow("frame1", frame1)
-            # frame1 = video1.frame()
-            # queue.put_nowait([frame, frame1])
-            #
-            #
-            # if not out_queue.empty():
-            #     stitched = out_queue.get_nowait()
-            #     cv2.imshow('frame', stitched)
-            #     elapsed = time.time() - start
-            #     counter += 1
-            #     sum += elapsed
-            #     print("Counter: ", counter)
-            #     print("Avarage: ", sum / counter)
-            #     print("Finish: ", elapsed)
+            try:
+                (status, stitched) = stitcher.stitch([frame0, frame1])
+                if status == 0:
+                    cv2.imshow("stitched", stitched)
+            except:
+                pass
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 #
@@ -75,19 +54,5 @@ def main():
 #     r = RadioSerialConnection(derece0,derece1)
 #     window.mainloop()
 #
-
-def main2():
-    queue = Queue()
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == "__main__":
     main()

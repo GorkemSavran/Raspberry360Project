@@ -14,6 +14,7 @@ class VideoReceiver(Thread):
         self.__isRunning: bool = False
         self.__frame = None
         self.setupPipeline()
+        self.daemon = True
         self.start()
         self.startExecution()
 
@@ -32,6 +33,7 @@ class VideoReceiver(Thread):
         Get frame
         """
         ret, self.__frame = self.cap.read()
+        print(self.__frame)
 
     def frame(self):
         """Get frame"""

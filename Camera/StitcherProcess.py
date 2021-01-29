@@ -14,7 +14,8 @@ class StitcherProcess(Process):
         cam1 = MJPGVideoReceiver(address="169.254.217.60", port=5600)
         stitcher = cv2.createStitcher(True) if imutils.is_cv3() else cv2.Stitcher_create()
         while True:
-
+            frame0 = cam0.frame()
+            frame1 = cam1.frame()
             try:
                 (status, stitched) = stitcher.stitch([frame, frame1])
                 if status == 0:
