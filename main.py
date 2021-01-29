@@ -1,11 +1,12 @@
-from VideoReceiver.RaspberryVideoReceiver import RaspberryVideoReceiver
+from Camera.MJPGVideoReceiver import MJPGVideoReceiver
 import cv2
+from multiprocessing import Queue
 
 
 def main():
     # send_queue = Queue()
     # get_queue = Queue()
-    camera_receivers = [RaspberryVideoReceiver(address=f"192.168.0.{47 + i}", port=5600) for i in range(2)]
+    # camera_receivers = [MJPGVideoReceiver(address=f"192.168.0.{47 + i}", port=5600) for i in range(2)]
     # stitcher = cv2.createStitcher(True) if imutils.is_cv3() else cv2.Stitcher_create()
 
     # stitcher_process = StitcherProcess(queue=queue, out_queue=out_queue)
@@ -14,11 +15,11 @@ def main():
 
     while True:
 
-        frames = [receiver.frame() for receiver in camera_receivers]
+        # frames = [receiver.frame() for receiver in camera_receivers]
         # if not frames.__contains__(None):
         #     frames = [receiver.frame() for receiver in camera_receivers]
         #     [cv2.imshow(f"frame{idx}", frame) for idx, frame in enumerate(frames)]
-        print(frames)
+        # print(frames)
         # [cv2.imshow(f"frame{idx}", frame) for idx, frame in enumerate(frames) if frame is not None]
         # try:
             #     (status, stitched) = stitcher.stitch([frame, frame1])
@@ -74,5 +75,19 @@ def main():
 #     r = RadioSerialConnection(derece0,derece1)
 #     window.mainloop()
 #
+
+def main2():
+    queue = Queue()
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     main()

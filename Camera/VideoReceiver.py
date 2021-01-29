@@ -4,8 +4,10 @@ from cv2 import VideoCapture
 
 class VideoReceiver(Thread):
 
-    def __init__(self, address: str = "192.168.2.1", port: int = 5600):
+    def __init__(self, address: str, port: int):
         Thread.__init__(self)
+        if not address or not port:
+            raise Exception("Please provide address and port")
         self.cap: VideoCapture = None
         self.address: str = address
         self.port: int = port
@@ -22,9 +24,9 @@ class VideoReceiver(Thread):
     def run(self):
         """Thread execution"""
         while self.__isRunning:
-            self.mission()
+            self.task()
 
-    def mission(self):
+    def task(self):
         """
         Script that we run
         Get frame
